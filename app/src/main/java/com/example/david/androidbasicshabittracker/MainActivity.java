@@ -93,22 +93,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void displayDatabaseInfo() {
-        SQLiteDatabase db = dbHelper.getReadableDatabase();
 
-        String[] projection = {
-                HabitContract.HabitEntry.COLUMN_NAME,
-                HabitContract.LogEntry.COLUMN_COMPLETED
-        };
-
-        Cursor cursor = db.query(
-                HabitContract.HabitEntry.TABLE_NAME + ", " + HabitContract.LogEntry.TABLE_NAME,
-                projection,
-                HabitContract.LogEntry.COLUMN_HABIT_ID + " = " + HabitContract.HabitEntry.TABLE_NAME + "." + HabitContract.HabitEntry._ID,
-                null,
-                null,
-                null,
-                null
-        );
+        Cursor cursor = read();
 
         try {
 
@@ -127,5 +113,30 @@ public class MainActivity extends AppCompatActivity {
         } finally {
             cursor.close();
         }
+    }
+
+    /* pre review comments I have named this method read
+       "You have the code for reading from the database and create a cursor, but it should be refactored in a method called "read()" as per rubric requirement. You can declare it private and the use it within the any other method. It will return a cursor then can be used to extract data from it."
+     */
+    private Cursor read()
+    {
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+
+        String[] projection = {
+                HabitContract.HabitEntry.COLUMN_NAME,
+                HabitContract.LogEntry.COLUMN_COMPLETED
+        };
+
+        Cursor cursor = db.query(
+                HabitContract.HabitEntry.TABLE_NAME + ", " + HabitContract.LogEntry.TABLE_NAME,
+                projection,
+                HabitContract.LogEntry.COLUMN_HABIT_ID + " = " + HabitContract.HabitEntry.TABLE_NAME + "." + HabitContract.HabitEntry._ID,
+                null,
+                null,
+                null,
+                null
+        );
+
+        return cursor;
     }
 }
